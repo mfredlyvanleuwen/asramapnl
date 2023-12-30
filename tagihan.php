@@ -1,0 +1,665 @@
+<?php include 'proses/koneksi.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" type="image/png" href="./assets/img/logo.png" />
+  <title>Tagihan</title>
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="./assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link id="pagestyle" href="./assets/css/material-dashboard.css?v=3.0.0" rel="stylesheet" />
+
+  <!-- DATATABLES -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.css" />
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+  <!-- DATATABLES -->
+</head>
+
+<body class="g-sidenav-show bg-gray-200">
+
+  <!-- SIDEBAR  -->
+  <?php include 'sidebar.php'; ?>
+  <!-- SIDEBAR -->
+
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <!-- Navbar -->
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
+      navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tagih Pembayaran</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Tagih Pembayaran</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+        </div>
+        <ul class="navbar-nav justify-content-end">
+          <li class="nav-item d-flex align-items-center">
+          </li>
+          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+              <div class="sidenav-toggler-inner">
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+              </div>
+            </a>
+          </li>
+          <li class="nav-item px-3 d-flex align-items-center">
+            <a href="javascript:;" class="nav-link text-body p-0">
+              <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      </div>
+    </nav>
+    <!-- End Navbar -->
+
+
+
+    <?php
+    if (isset($_GET['add_tagihan'])) {
+      $nama = $_GET['nama'];
+      $bulan = $_GET['bulan'];
+      $tahun = $_GET['tahun'];
+      $tagihan = $_GET['tagihan'];
+
+
+      $kueri = mysqli_query($conn, "INSERT INTO tagihan (nama, bulan, tahun, tagihan) VALUES ('$nama', $bulan, $tahun, $tagihan)");
+      echo "<script>window.location.href = 'tagihan.php';</script>";
+
+    }
+    ?>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalTagih" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Tagih Pembayaran</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="" method="GET">
+              <div class="input-group input-group-outline m-1">
+                <label class="form-label">Nama Tagihan</label>
+                <input type="text" name="nama" class="form-control" onfocus="focused(this)" onfocusout="defocused(this)"
+                  required>
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <div class="input-group input-group-outline m-1">
+                    <label class="form-label">Bulan</label>
+                    <input type="number" min="1" name="bulan" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="input-group input-group-outline m-1">
+                    <label class="form-label">Tahun</label>
+                    <input type="number" min="1" name="tahun" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-group input-group-outline m-1">
+                <label class="form-label">Jumlah Tagihan</label>
+                <input type="number" name="tagihan" class="form-control" required>
+              </div>
+
+              <input type="submit" class="btn btn-primary w-100 mt-3" name="add_tagihan" value="Tambah Tagihan">
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Isi Body -->
+    <div class="container-fluid py-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-warning shadow-primary border-radius-lg pt-4 pb-3">
+                <div class="row m-2">
+                  <div class="col-12">
+                    <h6 class="text-white text-capitalize ps-3">Tagih Pembayaran</h6>
+                  </div>
+                  <div class="col-12">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#modalTagih" class="btn btn-primary ">Tagih
+                      Pembayaran</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body px-0 pb-2">
+              <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0 text-center" id="myTable">
+                  <thead>
+                    <tr>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">No</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">ID tagihan</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Nama Tagihan</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Bulan</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Tahun</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Tagihan</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Tanggal Ditagih</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Status</th>
+                      <th class="text-uppercase text-dark text-xxs font-weight-bolder">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+
+                    <?php
+                    $no = 1;
+                    $kueri = mysqli_query($conn, "SELECT * FROM tagihan");
+
+                    $kueri2 = mysqli_query($conn, "SELECT * FROM tagihan WHERE status = 'active'");
+                    $cek2 = mysqli_num_rows($kueri2);
+
+                    while ($row = mysqli_fetch_array($kueri)) {
+                      ?>
+                      <tr>
+                        <td>
+                          <!-- No -->
+                          <?php echo $no++; ?>
+                        </td>
+                        <td>
+                          <?php echo $row['id_tagihan']; ?>
+                        </td>
+                        <td>
+                          <?php echo $row['nama']; ?>
+                        </td>
+                        <td>
+                          <?php echo $row['bulan']; ?>
+                        </td>
+                        <td>
+                          <?php echo $row['tahun']; ?>
+                        </td>
+                        <td>
+                          <?php echo format_rupiah($row['tagihan']); ?>
+                        </td>
+                        <td>
+                          <?php echo $row['tgl_tagih']; ?>
+                        </td>
+                        <td>
+                          <?php if ($row['status'] == 'non_active') { ?>
+                            <div class="bg-danger text-light rounded">
+                              <?php echo $row['status']; ?>
+                            </div>
+                          <?php } else { ?>
+                            <div class="bg-success text-light rounded">
+                              <?php echo $row['status']; ?>
+                            </div>
+                          <?php } ?>
+                        </td>
+                        <td>
+                          <?php if ($row['status'] == 'non_active') { ?>
+                            <?php if ($cek2 > 0) { ?>
+                              <a href="#" class="btn btn-sm btn-success" onclick="show()" disabled>AKTIFKAN</a>
+                            <?php } else { ?>
+                              <a onclick="set(<?php echo $row['id_tagihan']; ?>, 'active')"
+                                class="btn btn-sm btn-success">AKTIFKAN</a>
+                            <?php } ?>
+                          <?php } else { ?>
+                            <a onclick="set(<?php echo $row['id_tagihan']; ?>, 'non_active')"
+                              class="btn btn-sm btn-danger">NONAKTIFKAN</a>
+                          <?php } ?>
+
+                          <a data-bs-toggle="modal" data-bs-target="#modalLihat<?php echo $row['id_tagihan']; ?>"
+                            class="btn btn-sm btn-info">LIHAT</a>
+
+
+                        </td>
+                      </tr>
+
+
+                      <!-- Modal LLIHAT -->
+                      <div class="modal fade" id="modalLihat<?php echo $row['id_tagihan']; ?>" tabindex="-1"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Belum Membayar
+                              </h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="list-group" style="height:50vh; overflow:scroll;">
+                                <?php
+                                $i = 1;
+                                $tagihan = $row['id_tagihan'];
+                                $lihat = mysqli_query($conn, "SELECT * FROM mahasiswa WHERE id_mhs NOT IN (SELECT id_mhs FROM pembayaran WHERE id_tagihan = $tagihan)");
+                                while ($lihatt = mysqli_fetch_array($lihat)) {
+                                  ?>
+                                  <li href="#"
+                                    class="list-group-item list-group-item-action d-flex justify-content-between">
+                                    <div>
+                                      <?php echo $i++ . '. '; ?>
+                                      <?php echo $lihatt['nama_mhs']; ?> -
+                                      <?php echo $lihatt['nim']; ?>
+                                    </div> <a target="_blank" href="https://wa.me/<?php echo $lihatt['no_hp']; ?>"
+                                      class="btn btn-sm btn-success m-2">Chat</a>
+                                  </li>
+                                <?php } ?>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal LLIHAT -->
+
+
+                    <?php } ?>
+
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+
+                      function set(id, status) {
+                        let text = '';
+                        if (status == 'active') {
+                          text = 'Aktifkan';
+                        } else {
+                          text = 'Nonaktifkan';
+                        }
+                        Swal.fire({
+                          title: "Info",
+                          text: `${text} penagihan ?`,
+                          icon: "question",
+                          showConfirmButton: true,
+                          showCancelButton: true
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            window.location.href = `proses/set_tagihan.php?id=${id}&status=${status}`;
+                          }
+                        })
+
+                      }
+
+                      function show() {
+                        Swal.fire({
+                          title: "Oops",
+                          text: "Terdapat tagihan lain yang sedang aktif",
+                          icon: "warning"
+                        });
+                      }
+                    </script>
+
+                  </tbody>
+                </table>
+
+                <script>
+                  $(document).ready(function () {
+                    $('#myTable').DataTable();
+                  });
+                </script>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <br>
+  </main>
+  <div class="fixed-plugin">
+    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+      <i class="material-icons py-2">settings</i>
+    </a>
+    <div class="card shadow-lg">
+      <div class="card-header pb-0 pt-3">
+        <div class="float-start">
+          <h5 class="mt-3 mb-0">Material UI Configurator</h5>
+          <p>See our dashboard options.</p>
+        </div>
+        <div class="float-end mt-4">
+          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+            <i class="material-icons">clear</i>
+          </button>
+        </div>
+        <!-- End Toggle Button -->
+      </div>
+      <hr class="horizontal dark my-1" />
+      <div class="card-body pt-sm-3 pt-0">
+        <!-- Sidebar Backgrounds -->
+        <div>
+          <h6 class="mb-0">Sidebar Colors</h6>
+        </div>
+        <a href="javascript:void(0)" class="switch-trigger background-color">
+          <div class="badge-colors my-2 text-start">
+            <span class="badge filter bg-gradient-primary active" data-color="primary"
+              onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-dark" data-color="dark" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
+            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
+          </div>
+        </a>
+        <!-- Sidenav Type -->
+        <div class="mt-3">
+          <h6 class="mb-0">Sidenav Type</h6>
+          <p class="text-sm">Choose between 2 different sidenav types.</p>
+        </div>
+        <div class="d-flex">
+          <button class="btn bg-gradient-dark px-3 mb-2 active" data-class="bg-gradient-dark"
+            onclick="sidebarType(this)">Dark</button>
+          <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent"
+            onclick="sidebarType(this)">Transparent</button>
+          <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-white"
+            onclick="sidebarType(this)">White</button>
+        </div>
+        <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
+        <!-- Navbar Fixed -->
+        <div class="mt-3 d-flex">
+          <h6 class="mb-0">Navbar Fixed</h6>
+          <div class="form-check form-switch ps-0 ms-auto my-auto">
+            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)" />
+          </div>
+        </div>
+        <hr class="horizontal dark my-3" />
+        <div class="mt-2 d-flex">
+          <h6 class="mb-0">Light / Dark</h6>
+          <div class="form-check form-switch ps-0 ms-auto my-auto">
+            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)" />
+          </div>
+        </div>
+        <hr class="horizontal dark my-sm-4" />
+        <a class="btn btn-outline-dark w-100" href="">View documentation</a>
+      </div>
+    </div>
+  </div>
+  <!--   Core JS Files   -->
+  <script src="./assets/js/core/popper.min.js"></script>
+  <script src="./assets/js/core/bootstrap.min.js"></script>
+  <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/chartjs.min.js"></script>
+  <script>
+    var ctx = document.getElementById("chart-bars").getContext("2d");
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["M", "T", "W", "T", "F", "S", "S"],
+        datasets: [{
+          label: "Sales",
+          tension: 0.4,
+          borderWidth: 0,
+          borderRadius: 4,
+          borderSkipped: false,
+          backgroundColor: "rgba(255, 255, 255, .8)",
+          data: [50, 20, 10, 22, 50, 10, 40],
+          maxBarThickness: 6,
+        },],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5],
+              color: "rgba(255, 255, 255, .2)",
+            },
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: 500,
+              beginAtZero: true,
+              padding: 10,
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+              color: "#fff",
+            },
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5],
+              color: "rgba(255, 255, 255, .2)",
+            },
+            ticks: {
+              display: true,
+              color: "#f8f9fa",
+              padding: 10,
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    var ctx2 = document.getElementById("chart-line").getContext("2d");
+
+    new Chart(ctx2, {
+      type: "line",
+      data: {
+        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [{
+          label: "Mobile apps",
+          tension: 0,
+          borderWidth: 0,
+          pointRadius: 5,
+          pointBackgroundColor: "rgba(255, 255, 255, .8)",
+          pointBorderColor: "transparent",
+          borderColor: "rgba(255, 255, 255, .8)",
+          borderColor: "rgba(255, 255, 255, .8)",
+          borderWidth: 4,
+          backgroundColor: "transparent",
+          fill: true,
+          data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+          maxBarThickness: 6,
+        },],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5],
+              color: "rgba(255, 255, 255, .2)",
+            },
+            ticks: {
+              display: true,
+              color: "#f8f9fa",
+              padding: 10,
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+            },
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5],
+            },
+            ticks: {
+              display: true,
+              color: "#f8f9fa",
+              padding: 10,
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
+
+    new Chart(ctx3, {
+      type: "line",
+      data: {
+        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        datasets: [{
+          label: "Mobile apps",
+          tension: 0,
+          borderWidth: 0,
+          pointRadius: 5,
+          pointBackgroundColor: "rgba(255, 255, 255, .8)",
+          pointBorderColor: "transparent",
+          borderColor: "rgba(255, 255, 255, .8)",
+          borderWidth: 4,
+          backgroundColor: "transparent",
+          fill: true,
+          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+          maxBarThickness: 6,
+        },],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        interaction: {
+          intersect: false,
+          mode: "index",
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: true,
+              drawOnChartArea: true,
+              drawTicks: false,
+              borderDash: [5, 5],
+              color: "rgba(255, 255, 255, .2)",
+            },
+            ticks: {
+              display: true,
+              padding: 10,
+              color: "#f8f9fa",
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+            },
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+              borderDash: [5, 5],
+            },
+            ticks: {
+              display: true,
+              color: "#f8f9fa",
+              padding: 10,
+              font: {
+                size: 14,
+                weight: 300,
+                family: "Roboto",
+                style: "normal",
+                lineHeight: 2,
+              },
+            },
+          },
+        },
+      },
+    });
+  </script>
+  <script>
+    var win = navigator.platform.indexOf("Win") > -1;
+    if (win && document.querySelector("#sidenav-scrollbar")) {
+      var options = {
+        damping: "0.5",
+      };
+      Scrollbar.init(document.querySelector("#sidenav-scrollbar"), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="./assets/js/material-dashboard.min.js?v=3.0.0"></script>
+</body>
+
+</html>
